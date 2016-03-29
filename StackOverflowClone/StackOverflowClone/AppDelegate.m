@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "OAuthViewController.h"
+#import "BurgerContainerController.h"
+#import <AFNetworking/AFNetworking.h>
 
 @interface AppDelegate ()
 
@@ -17,7 +19,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self checkForAccessToken];
+    [self fetchAccessToken];
+    
+
     return YES;
 }
 
@@ -26,28 +30,19 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
--(void)checkForAccessToken
-{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *accessToken =[userDefaults stringForKey:@"accessToken"];
-    
-    if (!accessToken)
-    {
-        [self fetchAccessToken];
-    }
-    
-    
-}
+
+
 
 
 -(void)fetchAccessToken
 {
-    UIViewController *rootViewController = self.window.rootViewController;
+    BurgerContainerController *rootViewController = (BurgerContainerController *)self.window.rootViewController;
     
     OAuthViewController *oAuthViewController = [[OAuthViewController alloc]init];
     
     __weak typeof (oAuthViewController) weakOAuth = oAuthViewController;
     
+    if (![oAuthViewController getOAuthTokenFromKeychain]){
     oAuthViewController.completion = ^()
     {
         [weakOAuth.view removeFromSuperview];
@@ -57,6 +52,7 @@
     [rootViewController addChildViewController:oAuthViewController];
     [rootViewController.view addSubview:oAuthViewController.view];
     [oAuthViewController didMoveToParentViewController:rootViewController];
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {

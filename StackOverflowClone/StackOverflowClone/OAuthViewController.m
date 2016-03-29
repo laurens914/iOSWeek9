@@ -9,7 +9,7 @@
 #import "OAuthViewController.h"
 @import WebKit;
 
-
+NSString const *kAccessToken = @"kAccessToken";
 NSString const *kClientID = @"6796";
 NSString const *kBaseURL = @"https://stackexchange.com/oauth/dialog?";
 NSString const *kRedirectURL = @"https://stackexchange.com/oauth/login_success";
@@ -76,28 +76,43 @@ NSString const *kRedirectURL = @"https://stackexchange.com/oauth/login_success";
         NSArray *componentArray = [component componentsSeparatedByString:@"="];
         if (componentArray.count >= 2)
         {
-            NSString *key = componentArray[0];
-            NSString *value = componentArray[1];
-            if (key && value) {
-                NSLog(@"Key: %@, Value: %@", key, value);
-                [self saveToKeychain:value forKey:key];
+            NSString *key = [componentArray firstObject];
+            
+            if ([key isEqualToString:@"access_token"]){
+            NSString *token = [componentArray lastObject];
+            [self saveToKeychain:token];
             }
         }
     }
 }
+-(id)getOAuthTokenFromKeychain{
+    id token = nil;
+    NSMutableDictionary *keychainQuery = [self getKeychainQueryForString:@"kAccessToken"];
+    [keychainQuery setObject:(id)kCFBooleanTrue forKey:(__bridge id)kSecReturnData];
+    [keychainQuery setObject:(__bridge id)kSecMatchLimitOne forKey:(__bridge id)kSecMatchLimit];
+    
+    CFDataRef keyData = nil;
+    if (SecItemCopyMatching((__bridge CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData)==noErr){
+        token = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
+    }
+    if (keyData) CFRelease(keyData);
+    return token;
+    
+}
 
-//-(void)saveToUserDefaults:(NSString *)value forKey:(NSString *)key
-//{
-//    [[NSUserDefaults standardUserDefaults]setObject:value forKey:key];
-//    [[NSUserDefaults standardUserDefaults]synchronize];
-//    
-//}
-
--(void)saveToKeychain:(NSString *)value forKey:(NSString *)key
+-(NSMutableDictionary *)getKeychainQueryForString:(NSString *)query
 {
-    NSMutableDictionary *keychain = [[NSMutableDictionary alloc]init];
-    [keychain setObject:[NSKeyedArchiver archivedDataWithRootObject:value] forKey:key];
-    SecItemAdd((CFDictionaryRef)keychain, NULL);
+    return [@{(__bridge id) kSecClass: (__bridge id)kSecClassGenericPassword,
+              (__bridge id)kSecAttrService :query,
+              (__bridge id) kSecAttrAccount :query,
+              (__bridge id)kSecAttrAccessible : (__bridge id) kSecAttrAccessibleAfterFirstUnlock} mutableCopy];
+}
+
+-(void)saveToKeychain:(NSString *)token
+{
+    NSMutableDictionary *keychain = [self getKeychainQueryForString:token];
+    [keychain setObject:[NSKeyedArchiver archivedDataWithRootObject:token] forKey:(__bridge id)kSecValueData];
+    SecItemAdd((__bridge CFDictionaryRef)keychain, nil);
 }
 
 @end

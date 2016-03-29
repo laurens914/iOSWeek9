@@ -7,8 +7,15 @@
 //
 
 #import "UserSearchViewController.h"
+#import "User.h"
+#import "StackOverflowService.h"
+#import "JSONParser.h"
 
-@interface UserSearchViewController ()
+
+@interface UserSearchViewController ()<UITableViewDataSource, UISearchBarDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong,nonatomic) NSArray<User *> *users;
 
 @end
 
@@ -16,26 +23,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 +(NSString *)identifier{
     return @"UserSearchViewController";
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.users.count;
 }
-*/
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *userCell = [tableView dequeueReusableCellWithIdentifier:@"userCell" forIndexPath:indexPath];
+    userCell.textLabel.text = self.users[indexPath.row].displayName;
+    
+    return userCell;
+    
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [StackOverflowService searchWithUser:searchBar.text withCompletion:^(NSDictionary * _Nullable data, NSError * _Nullable error) {
+        self.users = [JSONParser usersArrayFromDictionary:data];
+        [self.tableView reloadData];
+    }];
+    [self resignFirstResponder];
+}
 
 @end

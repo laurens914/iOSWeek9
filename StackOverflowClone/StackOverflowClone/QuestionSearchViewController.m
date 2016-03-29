@@ -7,16 +7,21 @@
 //
 
 #import "QuestionSearchViewController.h"
+#import "StackOverflowService.h"
+#import "JSONParser.h"
+#import "Question.h"
 
-@interface QuestionSearchViewController ()
+@interface QuestionSearchViewController ()<UITableViewDataSource, UISearchBarDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property(strong,nonatomic) NSArray<Question *> *questions;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @end
 
 @implementation QuestionSearchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
@@ -28,14 +33,30 @@
 {
     return @"QuestionSearchViewController";
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.questions.count;
 }
-*/
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *questionCell = [tableView dequeueReusableCellWithIdentifier:@"questionCell" forIndexPath:indexPath];
+    
+    questionCell.textLabel.text = self.questions[indexPath.row].title;
+    
+    return questionCell;
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [StackOverflowService searchWithTerm:searchBar.text withCompletion:^(NSDictionary * _Nullable data, NSError * _Nullable error) {
+        if (error == nil){
+            self.questions = [JSONParser questionsArrayFromDictionary:data];
+            [self.tableView reloadData];
+        }
+    }];
+    [self resignFirstResponder];
+}
 
 @end

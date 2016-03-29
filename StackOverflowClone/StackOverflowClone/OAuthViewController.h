@@ -15,6 +15,6 @@ typedef void (^OAuthViewControllerCompletion)();
 @property (copy, nonatomic) OAuthViewControllerCompletion completion;
 
 
-+(NSString *)identifier;
+-(id)getOAuthTokenFromKeychain;
 
 @end
