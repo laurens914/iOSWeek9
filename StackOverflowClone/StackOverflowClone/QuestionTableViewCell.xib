@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="questionCell" rowHeight="85" id="KGk-i7-Jjw" customClass="QuestionTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="390" height="85"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="390" height="84"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Q:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxx-cw-tzs">
+                        <rect key="frame" x="8" y="29" width="23" height="27"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="23" id="4hV-7p-iqS"/>
+                            <constraint firstAttribute="height" constant="27" id="MFy-CB-TAG"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Question Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYz-LZ-w70">
+                        <rect key="frame" x="39" y="8" width="343" height="41"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="isAnswered" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p2d-Op-s54">
+                        <rect key="frame" x="326" y="64" width="56" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="12" id="zeh-nW-iLj"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="AYz-LZ-w70" secondAttribute="trailing" constant="8" id="FRV-zs-C5R"/>
+                    <constraint firstAttribute="bottom" secondItem="p2d-Op-s54" secondAttribute="bottom" constant="8" id="Nef-E8-m34"/>
+                    <constraint firstItem="AYz-LZ-w70" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="QGh-yR-Tgq"/>
+                    <constraint firstItem="p2d-Op-s54" firstAttribute="top" secondItem="AYz-LZ-w70" secondAttribute="bottom" constant="15" id="Sbe-07-5ce"/>
+                    <constraint firstItem="qxx-cw-tzs" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="UkZ-to-aL1"/>
+                    <constraint firstItem="AYz-LZ-w70" firstAttribute="leading" secondItem="qxx-cw-tzs" secondAttribute="trailing" constant="8" id="bti-bM-bh7"/>
+                    <constraint firstAttribute="trailing" secondItem="p2d-Op-s54" secondAttribute="trailing" constant="8" id="ee3-lS-hIf"/>
+                    <constraint firstItem="qxx-cw-tzs" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="kvt-Bb-uuo"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="isAnswered" destination="p2d-Op-s54" id="f5U-XO-EgR"/>
+                <outlet property="questionTitle" destination="AYz-LZ-w70" id="y0i-gT-1l9"/>
+            </connections>
+            <point key="canvasLocation" x="434" y="240.5"/>
+        </tableViewCell>
+    </objects>
+</document>

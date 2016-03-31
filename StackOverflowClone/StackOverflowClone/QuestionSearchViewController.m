@@ -10,24 +10,32 @@
 #import "StackOverflowService.h"
 #import "JSONParser.h"
 #import "Question.h"
+#import "QuestionTableViewCell.h"
 
 @interface QuestionSearchViewController ()<UITableViewDataSource, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property(strong,nonatomic) NSArray<Question *> *questions;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+//@property (strong,nonatomic) NSString *team;
 @end
 
 @implementation QuestionSearchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setupTableView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+//-(void)setValue:(id)value forKey:(NSString *)key
+//{
+//    [self setValue:@"Seahawks" forKey:@"Team"];
+//}
 
 +(NSString *)identifier
 {
@@ -41,9 +49,15 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *questionCell = [tableView dequeueReusableCellWithIdentifier:@"questionCell" forIndexPath:indexPath];
+    QuestionTableViewCell *questionCell = [tableView dequeueReusableCellWithIdentifier:@"questionCell" forIndexPath:indexPath];
     
-    questionCell.textLabel.text = self.questions[indexPath.row].title;
+    questionCell.questionTitle.text = self.questions[indexPath.row].title;
+    
+    if (self.questions[indexPath.row].isAnswered){
+        questionCell.isAnswered.text = @"Answered: Yes";
+    } else {
+        questionCell.isAnswered.text = @"Answered: No";
+    }
     
     return questionCell;
 }
@@ -58,5 +72,40 @@
     }];
     [self resignFirstResponder];
 }
+
+-(void)setupTableView
+{
+    self.tableView.estimatedRowHeight = 100;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    UINib *nib = [UINib nibWithNibName:@"QuestionTableViewCell" bundle:nil];
+    
+    [self.tableView registerNib:nib forCellReuseIdentifier:@"questionCell"];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
